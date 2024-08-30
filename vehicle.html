@@ -3,54 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Road Video Vehicle Counter</title>
+    <title>Vehicle Counting</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
         }
-        #video-container {
-            position: relative;
-            width: 640px;
-            height: 360px;
+
+        video, canvas {
+            border: 1px solid black;
+            margin-bottom: 10px;
         }
-        video {
-            width: 100%;
-            height: 100%;
-        }
+
         canvas {
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
         }
-        #controls {
-            margin-top: 20px;
-        }
-        #controls button {
-            margin-right: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
+
+        #container {
+            position: relative;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
-    <h1>Road Video Vehicle Counter</h1>
-    <div id="video-container">
-        <video id="video" controls></video>
-        <canvas id="canvas"></canvas>
+    <div id="container">
+        <video id="video" width="640" height="360"></video>
+        <canvas id="canvas" width="640" height="360"></canvas>
     </div>
-    <div id="controls">
-        <input type="file" id="video-upload" accept="video/*">
-        <button id="draw-btn">Draw Line</button>
-        <button id="stop-btn">Stop Drawing</button>
-    </div>
+    <input type="file" id="video-upload" accept="video/*">
+    <button id="draw-btn">Draw Line</button>
+    <!-- <button id="stop-btn">Stop Drawing</button> -->
+    <button id="erase-last-btn">Erase Last Line</button>
+    <button id="erase-all-btn">Erase All Lines</button>
+
 
     <script src="script.js"></script>
 </body>
