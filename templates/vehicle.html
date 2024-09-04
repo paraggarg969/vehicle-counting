@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Counting</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        video, canvas {
+            border: 1px solid black;
+            margin-bottom: 10px;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #container {
+            position: relative;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <video id="video" width="640" height="360"></video>
+            <!-- <source src="/video-feed" type="video/mp4"> -->
+        <canvas id="canvas" width="640" height="360"></canvas>
+    </div>
+    <input type="file" id="video-upload" accept="video/*">
+    <button id="draw-btn">Draw Line</button>
+    <button id="start">start</button>
+    <button id="erase-last-btn">Erase Last Line</button>
+    <button id="erase-all-btn">Erase All Lines</button>
+
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
