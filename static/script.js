@@ -60,8 +60,10 @@ function handleVideoUpload(event) {
     .then(data => {
         if (data.success) {
             // video.src = URL.createObjectURL(file); // Show the video
-            video.src = data.video_url;
-            video.play();
+            // video.src = data.video_url;
+
+            video.src = "/video-feed";
+            // video.play();
         } else {
             console.error('Upload failed:', data.message);
         }
@@ -94,7 +96,7 @@ function startDrawing(event) {
             ctx.lineTo(x / videoScaleFactorWidth, y / videoScaleFactorHeight);
             ctx.stroke();
             logLineCoordinates();
-            updateLineCoordinates();
+            // updateLineCoordinates()
         } else {
             ctx.beginPath();
             ctx.moveTo(x / videoScaleFactorWidth, y / videoScaleFactorHeight);
@@ -123,6 +125,7 @@ function draw(event) {
 
 function stopDrawing() {
     if (isDrawing && tempLine.length === 4) {
+        console.log("test 2",tempLine);
         tempLine = [];
         // updateLineCoordinates();
     }
@@ -149,6 +152,7 @@ function logLineCoordinates() {
             direction = x2 > x1 ? 'Right' : 'Left';
         }
         console.log(`${direction} coordinates: (${x1}, ${y1}) to (${x2}, ${y2})`);
+        updateLineCoordinates();
     }
 }
 

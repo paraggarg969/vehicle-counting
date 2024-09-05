@@ -21,7 +21,7 @@ model = YOLO(model_path)
 total_count_down = []
 
 
-limit_down = [200, 650, 600, 650]
+limit_down = [100, 650, 500, 650]
 
 
 tracker = Sort(max_age=20, min_hits=3, iou_threshold=0.3)
@@ -41,7 +41,7 @@ def set_line():
 
 @app.route('/upload-video', methods=['POST'])
 def upload_video():
-    global cap
+    global cap, width, height, ratiowidth, ratioheight
     if 'video' not in request.files:
         return jsonify({'success': False, 'message': 'No video part'}), 400
 
@@ -54,7 +54,20 @@ def upload_video():
         file.save(filepath)
 
         cap = cv2.VideoCapture(filepath)
-        print(filepath)
+
+        if cap.isOpened():
+            # Get the width and height of the video frames
+            width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+            height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+        print(f"Width: {width}, Height: {height}")
+
+        ratiowidth = width/640
+        ratioheight = height/360
+
+        print("ratiowidth : ",ratiowidth," ","ratioheight : ",ratioheight)
+
+        # print(filepath)
 
         return jsonify({'success': True, 'video_url': '/uploads/' + file.filename}), 200
 
@@ -68,7 +81,7 @@ def uploaded_file(filename):
 def generate_video():
     global cap, limit_down
     print("p1",limit_down)
-    # cap = cv2.VideoCapture('D:/munjal CSE/semester 5/atul sir/vehicle-counting/python/vehicle.mp4')  # Ensure the correct path
+    # cap = cv2.VideoCapture('vehicle.mp4')  # Ensure the correct path
     # print(cap)
     while True:
         ret, frame = cap.read()
@@ -93,6 +106,7 @@ def generate_video():
                 # limit_down = (float(limit_down[0]), float(limit_down[1]), float(limit_down[2]), float(limit_down[3]))
                 limit_down = (int(limit_down[0]), int(limit_down[1]), int(limit_down[2]), int(limit_down[3]))
                 print(f"limit_down: {limit_down}")
+                # cv2.line(frame, (limit_down[0]*ratiowidth, limit_down[1]*ratioheight), (limit_down[2]*ratiowidth, limit_down[3]*ratioheight), (255, 0, 255), 2)
                 cv2.line(frame, (limit_down[0], limit_down[1]), (limit_down[2], limit_down[3]), (255, 0, 255), 2)
 
                 for result in results_tracker:
@@ -110,15 +124,15 @@ def generate_video():
 
         # Encode the frame in JPEG format
         ret, jpeg = cv2.imencode('.jpg', frame)
-        if not ret:
-            break
+        # if not ret:
+        #     break
 
         # Convert to byte array
         frame_bytes = jpeg.tobytes()
 
         # Yield the frame as a byte response
         yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n\r\n')
+               b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
 
     cap.release()
 
