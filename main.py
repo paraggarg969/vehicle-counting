@@ -161,16 +161,18 @@ def generate_video():
 
                 for result in results_tracker:
                     x1, y1, x2, y2, id = map(int, result)
-                    w, h = x2 - x1, y2 - y1
-                    cx, cy = x1 + w // 2, y1 + h // 2
+                    cx, cy = int((x1 + x2) / 2), int((y1 + y2) / 2)
+                    cv2.circle(frame,(cx,cy),5,(255,0,255),cv2.FILLED)
                     cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                    cv2.putText(frame, f'{int(id)}', (x1, y1), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+                    #cv2.putText(frame, f'{int(id)}', (x1, y1), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
 
-                    if limit_down[1] < cy < limit_down[1] + 20:
+                    if limit_down[0] < cx < limit_down[2] and limit_down[1] -15 < cy < limit_down[3] + 15 :
+                    #if limit_down[1] - 15 < cy < limit_down[3] + 15:
                         if id not in total_count_down:
                             total_count_down.append(id)
+                            cv2.line(frame, (limit_down[0], limit_down[1]), (limit_down[2], limit_down[3]), (0, 255, 0),5)
 
-                cv2.putText(frame, f'VEHICLE COUNT: {len(total_count_down)}', (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
+                cv2.putText(frame, f'VEHICLE COUNT: {len(total_count_down)}', (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 0, 0), 2)
 
         # Encode the frame in JPEG format
         ret, jpeg = cv2.imencode('.jpg', frame)
